@@ -21,3 +21,4 @@ tzdata==2024.2
 urllib3==2.2.3
 Werkzeug==3.0.5
 yarg==0.1.10
+openpyxl==3.1.4
