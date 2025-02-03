@@ -131,18 +131,18 @@ const TableGraph = ({ newTableData, mainData }) => {
         filteredData.forEach(order => {
             const rmName = order["RM Name"];
             if (rmCount[rmName]) {
-              rmCount[rmName]++;
+                rmCount[rmName]++;
             } else {
-              rmCount[rmName] = 1;
+                rmCount[rmName] = 1;
             }
-          });
+        });
 
         console.log(rmCount);
 
         const result = Object.keys(rmCount).map(rm => ({
             RM: rm,
             count: rmCount[rm]
-          }));
+        }));
         return result;
     };
 
@@ -188,8 +188,9 @@ const TableGraph = ({ newTableData, mainData }) => {
                     {/* <Bar dataKey="pv" fill="#82ca9d" /> */}
                 </BarChart>
             </div>
-
+                                
             <Button
+                className="flex"
                 variant="contained"
                 color="primary"
                 onClick={() => setShowTable(!showTable)}
@@ -209,11 +210,13 @@ const TableGraph = ({ newTableData, mainData }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredTableData.map((item, index) => (
-                                Object.values(item).map((value, index) => {
-                                    return <td className="border border-gray-300 px-4 py-2" key={index}>{value}</td>
-                                }
-                                )))}
+                            {filteredTableData.map((item, rowIndex) => (
+                                <tr key={rowIndex} className="bg-gray-100">
+                                    {Object.values(item).map((value, colIndex) => (
+                                        <td key={colIndex} className="border border-gray-300 px-4 py-2">{value ?? 'N/A'}</td>
+                                    ))}
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>

@@ -53,7 +53,7 @@ const MainBoard = ({ mainData }) => {
       </style>
 
       {/* Filter Section */}
-      <div className="fixed top-0 left-0 w-[80vw] p-4 bg-gray-100 flex flex-col gap-4 px-10 pt-5  ">
+      <div className="fixed top-0 left-0 w-[80vw] p-4 bg-gray-100 flex flex-col gap-4 px-10 pt-5 z-100 ">
       <h1 className="text-xl font-bold mt-5 mb-5 text-black">Leads Data</h1>
 
         <div className="flex gap-4">

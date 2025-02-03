@@ -1,11 +1,21 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
 
-const SidePanelDashboard = () => {
+const SidePanelDashboard = ({mainData}) => {
   const containerRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const [skuFrequency, setSKUFrequency] = useState([]);
 
   useEffect(() => {
+
+    Object.values(mainData).forEach(item => {
+      let tempData =  getSKUFrequency(item);
+      console.log(tempData);
+      setSKUFrequency([...skuFrequency, ...tempData]);
+      console.log(skuFrequency);
+      }
+    );
+
     const updateDimensions = () => {
       if (containerRef.current) {
         const { width, height } = containerRef.current.getBoundingClientRect();
@@ -24,7 +34,9 @@ const SidePanelDashboard = () => {
 
     // Cleanup
     return () => window.removeEventListener('resize', updateDimensions);
-  }, []);
+
+    
+  }, [mainData]);
 
   // Sample data
   const lineData = [
@@ -54,12 +66,35 @@ const SidePanelDashboard = () => {
     { name: 'Apr', value: 800 },
   ];
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
+  const COLORS = [ "#FF5733", "#33FF57", "#3357FF", "#FF33A6", "#A633FF",
+    "#33FFF0", "#F0FF33", "#FF8633", "#33FF98", "#FF8333",
+    "#33A6FF", "#FF5733", "#C833FF", "#FF33E3", "#33FFD1",
+    "#F0A233", "#33F0A6", "#F533FF", "#FF3316", "#A6FF33",
+    "#F0FF33", "#5733FF", "#FF3377", "#33FFB8", "#33A6FF",
+    "#F033FF", "#FF5733", "#33D1FF", "#FF3385", "#33FF61"];
 
   // Calculate dimensions for each chart
   const chartWidth = dimensions.width * 0.9; // 90% of container width
   const chartHeight = (dimensions.height / 4) * 0.8; // 80% of quarter height
   const pieRadius = Math.min(chartWidth, chartHeight) / 3;
+
+
+  // Function to get the frequency of each SKU
+  function getSKUFrequency(data) {
+    const skuCount = {};
+
+    data.forEach(item => {
+        const sku = item["SKU"];
+        if (sku) {
+            skuCount[sku] = (skuCount[sku] || 0) + 1;
+        }
+    });
+
+    return Object.keys(skuCount).map(sku => ({
+        "SKU": sku,
+        "count": skuCount[sku]
+    }));
+}
 
   return (
     <div className="fixed top-0 right-0 w-1/5 h-screen bg-gray-100 " ref={containerRef}>
@@ -103,13 +138,15 @@ const SidePanelDashboard = () => {
             {dimensions.width > 0 && (
               <PieChart width={chartWidth} height={chartHeight}>
                 <Pie
-                  data={pieData}
+                  data={skuFrequency}
                   cx="50%"
                   cy="50%"
                   outerRadius={pieRadius}
-                  dataKey="value"
+                  dataKey="count"
+                  nameKey="SKU"
+
                 >
-                  {pieData.map((entry, index) => (
+                  {skuFrequency.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
