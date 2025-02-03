@@ -5,7 +5,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 envPORT = int(os.getenv("PORT", 5000))
-CORS(app,origins="http://localhost:3039")
+CORS(app)
 
 # Function to load and process Excel data
 def load_excel():
