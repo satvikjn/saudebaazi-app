@@ -4,7 +4,8 @@ import os
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+envPORT = int(os.getenv("PORT", 5000))
+CORS(app,origins="http://localhost:3039")
 
 # Function to load and process Excel data
 def load_excel():
@@ -28,9 +29,5 @@ def get_orders():
 def get_visits():
     return jsonify(visits_df.to_dict(orient="records"))
 
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
-
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=envPORT, debug=True)
